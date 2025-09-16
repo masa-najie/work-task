@@ -42,7 +42,7 @@ export function SortableRow({ id, children }: SortableRowProps) {
     transform,
     transition,
     isDragging,
-  } = useSortable({ id: id });
+  } = useSortable({ id });
 
   const style: React.CSSProperties = {
     transform: CSS.Transform.toString(transform),
@@ -52,11 +52,12 @@ export function SortableRow({ id, children }: SortableRowProps) {
   };
 
   return (
-    <TableRow ref={setNodeRef} style={style} {...attributes} {...listeners}>
+    <TableRow ref={setNodeRef} style={style} {...attributes}>
       {children}
     </TableRow>
   );
 }
+
 export default function DataTable<Tdata, Tvalue>({
   data,
   columns,
