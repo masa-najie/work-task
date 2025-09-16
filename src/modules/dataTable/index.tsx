@@ -93,7 +93,6 @@ export default function DataTable<Tdata, Tvalue>({
       });
     }
   };
-  console.log({ data });
   return (
     <div className="space-y-4 border rounded-lg shadow-md overflow-hidden ">
       <Table className="w-full text-lg">

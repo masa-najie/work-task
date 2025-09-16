@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { Button } from "@/src/components/ui/button";
+import EditDataSheet from "@/src/modules/dashboard/EditDataSheet";
 import DataTable from "@/src/modules/dataTable";
 import { ColumnDef } from "@tanstack/react-table";
 import { Pencil, Trash2 } from "lucide-react";
@@ -21,6 +22,44 @@ export default function Page() {
     localStorage.setItem("tableData", JSON.stringify(data));
   }, [data]);
 
+  function handleSave(updatedItem: Payment) {
+    setData((prev) => {
+      const newData = prev.map((item) =>
+        item.id === updatedItem.id ? updatedItem : item
+      );
+      localStorage.setItem("tableData", JSON.stringify(newData));
+      return newData;
+    });
+  }
+  const columns: ColumnDef<Payment>[] = [
+    {
+      accessorKey: "status",
+      header: "Status",
+    },
+    {
+      accessorKey: "email",
+      header: "Email",
+    },
+    {
+      accessorKey: "amount",
+      header: "Amount",
+    },
+    {
+      accessorKey: "actions",
+      header: "Actions",
+      cell: ({ row }: any) => {
+        return (
+          <div className="flex items-center justify-center space-x-2">
+            <EditDataSheet item={row.original} onSave={handleSave} />
+            <Button variant="ghost" size="icon">
+              <Trash2 />
+            </Button>
+          </div>
+        );
+      },
+    },
+  ];
+
   return (
     <div className="flex justify-center items-center min-h-screen bg-background">
       <div className="w-full max-w-4xl">
@@ -30,46 +69,10 @@ export default function Page() {
   );
 }
 
-export const columns: ColumnDef<Payment>[] = [
-  {
-    accessorKey: "status",
-    header: "Status",
-  },
-  {
-    accessorKey: "email",
-    header: "Email",
-  },
-  {
-    accessorKey: "amount",
-    header: "Amount",
-  },
-  {
-    accessorKey: "actions",
-    header: "Actions",
-    cell: ({ row }: any) => {
-      return (
-        <div className="flex items-center justify-center space-x-2">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => {
-              console.log("working");
-            }}
-          >
-            <Trash2 />
-          </Button>
-          <Button variant="ghost" size="icon">
-            <Pencil />
-          </Button>
-        </div>
-      );
-    },
-  },
-];
 export type Payment = {
   id: string;
   amount: number;
-  status: "pending" | "processing" | "success" | "failed";
+  status: string;
   email: string;
 };
 export const payments: Payment[] = [
