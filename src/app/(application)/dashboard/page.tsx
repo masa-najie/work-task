@@ -4,23 +4,27 @@ import { Button } from "@/src/components/ui/button";
 import DataTable from "@/src/modules/dataTable";
 import { ColumnDef } from "@tanstack/react-table";
 import { Pencil, Trash2 } from "lucide-react";
+import React from "react";
 
 export default function Page() {
+  const [data, setData] = React.useState<Payment[]>();
+  React.useEffect(() => {
+    const stored = localStorage.getItem("tableData");
+    if (stored) {
+      setData(JSON.parse(stored));
+    } else {
+      localStorage.setItem("tableData", JSON.stringify(payments));
+      setData(payments);
+    }
+  }, []);
   return (
     <div className="flex justify-center items-center min-h-screen bg-background">
       <div className="w-full max-w-4xl">
-        <DataTable columns={columns} data={payments} />
+        <DataTable columns={columns} data={data} />
       </div>
     </div>
   );
 }
-
-export type Payment = {
-  id: string;
-  amount: number;
-  status: "pending" | "processing" | "success" | "failed";
-  email: string;
-};
 
 export const columns: ColumnDef<Payment>[] = [
   {
@@ -52,7 +56,12 @@ export const columns: ColumnDef<Payment>[] = [
     },
   },
 ];
-
+export type Payment = {
+  id: string;
+  amount: number;
+  status: "pending" | "processing" | "success" | "failed";
+  email: string;
+};
 export const payments: Payment[] = [
   {
     id: "1",

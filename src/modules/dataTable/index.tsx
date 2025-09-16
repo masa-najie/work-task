@@ -27,7 +27,7 @@ import {
   restrictToVerticalAxis,
 } from "@dnd-kit/modifiers";
 interface DataTableProps<Tdata, Tvalue> {
-  data: Tdata[];
+  data?: Tdata[];
   columns: ColumnDef<Tdata, Tvalue>[];
 }
 interface SortableRowProps {
@@ -61,7 +61,16 @@ export default function DataTable<Tdata, Tvalue>({
   data,
   columns,
 }: DataTableProps<Tdata, Tvalue>) {
-  const [tableData, setTableData] = React.useState<Tdata[]>(data);
+  const [tableData, setTableData] = React.useState<Tdata[]>(data || []);
+  React.useEffect(() => {
+    const stored = localStorage.getItem("tableData");
+    if (stored) {
+      setTableData(JSON.parse(stored));
+    }
+  }, []);
+  React.useEffect(() => {
+    localStorage.setItem("tableData", JSON.stringify(tableData));
+  }, [tableData]);
 
   const table = useReactTable({
     data: tableData,
@@ -79,8 +88,6 @@ export default function DataTable<Tdata, Tvalue>({
       (item: any) => String(item.id) === over?.id
     );
     if (active.id !== over.id) {
-      console.log("oldIndex:", oldIndex, "newIndex:", overIndex);
-
       setTableData((items) => {
         return arrayMove(items, oldIndex, overIndex);
       });
@@ -139,7 +146,7 @@ export default function DataTable<Tdata, Tvalue>({
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 text-center text-lg"
+                  className="h-24 text-center text-lg px-6 py-4 bg-muted/50"
                 >
                   No results.
                 </TableCell>
