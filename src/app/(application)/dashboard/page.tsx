@@ -4,7 +4,7 @@ import { Button } from "@/src/components/ui/button";
 import EditDataSheet from "@/src/modules/dashboard/EditDataSheet";
 import DataTable from "@/src/modules/dataTable";
 import { ColumnDef } from "@tanstack/react-table";
-import { Pencil, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import React from "react";
 
 export default function Page() {
@@ -31,6 +31,13 @@ export default function Page() {
       return newData;
     });
   }
+  function handleDelete(id: string) {
+    setData((prev) => {
+      const newData = prev.filter((item) => item.id !== id);
+      localStorage.setItem("tableData", JSON.stringify(newData));
+      return newData;
+    });
+  }
   const columns: ColumnDef<Payment>[] = [
     {
       accessorKey: "status",
@@ -51,7 +58,11 @@ export default function Page() {
         return (
           <div className="flex items-center justify-center space-x-2">
             <EditDataSheet item={row.original} onSave={handleSave} />
-            <Button variant="ghost" size="icon">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => handleDelete(row.original.id)}
+            >
               <Trash2 />
             </Button>
           </div>
