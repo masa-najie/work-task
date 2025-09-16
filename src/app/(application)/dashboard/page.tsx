@@ -2,6 +2,7 @@
 "use client";
 import { Button } from "@/src/components/ui/button";
 import EditDataSheet from "@/src/modules/dashboard/EditDataSheet";
+import { Payment, payments } from "@/src/modules/dashboard/payments";
 import DataTable from "@/src/modules/dataTable";
 import { ColumnDef } from "@tanstack/react-table";
 import { Trash2 } from "lucide-react";
@@ -79,42 +80,3 @@ export default function Page() {
     </div>
   );
 }
-
-export type Payment = {
-  id: string;
-  amount: number;
-  status: string;
-  email: string;
-};
-export const payments: Payment[] = [
-  {
-    id: "1",
-    email: "alice@example.com",
-    amount: 250,
-    status: "pending",
-  },
-  {
-    id: "2",
-    email: "bob@example.com",
-    amount: 540,
-    status: "processing",
-  },
-  {
-    id: "3",
-    email: "charlie@example.com",
-    amount: 120,
-    status: "success",
-  },
-  {
-    id: "4",
-    email: "diana@example.com",
-    amount: 75,
-    status: "failed",
-  },
-  {
-    id: "5",
-    email: "eve@example.com",
-    amount: 999,
-    status: "success",
-  },
-];

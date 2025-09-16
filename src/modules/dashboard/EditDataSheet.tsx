@@ -18,8 +18,8 @@ import {
 } from "@/src/components/ui/form";
 import { Input } from "@/src/components/ui/input";
 import { Button } from "@/src/components/ui/button";
-import { Payment } from "@/src/app/(application)/dashboard/page";
 import React from "react";
+import { Payment } from "./payments";
 const formSchema = z.object({
   status: z.string().min(1, "status required"),
   email: z.string().email(),
