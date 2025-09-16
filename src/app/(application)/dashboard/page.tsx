@@ -7,20 +7,24 @@ import { Pencil, Trash2 } from "lucide-react";
 import React from "react";
 
 export default function Page() {
-  const [data, setData] = React.useState<Payment[]>();
+  const [data, setData] = React.useState<Payment[]>([]);
   React.useEffect(() => {
     const stored = localStorage.getItem("tableData");
-    if (stored) {
+    if (stored && JSON.parse(stored).length > 0) {
       setData(JSON.parse(stored));
     } else {
       localStorage.setItem("tableData", JSON.stringify(payments));
       setData(payments);
     }
   }, []);
+  React.useEffect(() => {
+    localStorage.setItem("tableData", JSON.stringify(data));
+  }, [data]);
+
   return (
     <div className="flex justify-center items-center min-h-screen bg-background">
       <div className="w-full max-w-4xl">
-        <DataTable columns={columns} data={data} />
+        <DataTable columns={columns} data={data} setData={setData} />
       </div>
     </div>
   );
@@ -45,7 +49,13 @@ export const columns: ColumnDef<Payment>[] = [
     cell: ({ row }: any) => {
       return (
         <div className="flex items-center justify-center space-x-2">
-          <Button variant="ghost" size="icon">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => {
+              console.log("working");
+            }}
+          >
             <Trash2 />
           </Button>
           <Button variant="ghost" size="icon">
